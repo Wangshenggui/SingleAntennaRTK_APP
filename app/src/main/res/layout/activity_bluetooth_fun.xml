@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BluetoothFunActivity">
+
+    <FrameLayout
+        android:id="@+id/bluetoothfunction_page_controller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:background="#EFEEEE" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bluetoothfunction_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bottom_navigation_background_color"
+        app:itemIconTint="@color/bottom_navigation_item_color"
+        app:itemTextColor="@drawable/bottom_navigation_text_color_selector"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintTop_toBottomOf="@id/bluetoothfunction_page_controller"
+        app:menu="@menu/bluetoothfunction" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
