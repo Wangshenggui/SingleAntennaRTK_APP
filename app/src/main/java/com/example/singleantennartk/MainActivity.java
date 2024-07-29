@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private SocketService socketService;
     private boolean isBound = false;
     Button goBluetoothButton;
+
     public static OutputStream outputStream=null;//获取输出数据
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 if (isBound) {
                     socketService.sendMessage(message);
                 }
-            }
-        });
+            }}
+        );
         goBluetoothButton = (Button) findViewById(R.id.goBluetoothButton);
 
         goBluetoothButton.setOnClickListener(new View.OnClickListener() {
