@@ -1,19 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- IP Address Input -->
+    <EditText
+        android:id="@+id/ip"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:hint="Enter IP Address"
+        android:inputType="text"
+        android:text="120.253.239.161"
+        android:ems="10" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Port Input -->
+    <EditText
+        android:id="@+id/port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Port"
+        android:inputType="number"
+        android:text="8002"
+        android:ems="6" />
+
+    <!-- Message Output -->
+    <EditText
+        android:id="@+id/out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter message"
+        android:text="jagoehoahgawrfasstgfe"
+        android:inputType="text" />
+
+    <!-- Received Message Display 1 -->
+    <TextView
+        android:id="@+id/receive1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Received Data 1"
+        android:paddingTop="10dp"
+        android:textSize="16sp" />
+
+    <!-- Received Message Display 2 -->
+    <TextView
+        android:id="@+id/receive2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Received Data 2"
+        android:paddingTop="10dp"
+        android:textSize="16sp" />
+
+    <!-- Connect Button -->
+    <Button
+        android:id="@+id/connect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect"
+        android:layout_marginTop="16dp" />
+
+    <!-- Send Button -->
+    <Button
+        android:id="@+id/send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/sendgga"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sendgga"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
