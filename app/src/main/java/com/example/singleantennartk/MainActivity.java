@@ -13,6 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private Button connect, send,sendgga;
     private SocketService socketService;
     private boolean isBound = false;
+    Button goBluetoothButton;
+    public static OutputStream outputStream=null;//获取输出数据
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
@@ -68,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +128,15 @@ public class MainActivity extends AppCompatActivity {
                 if (isBound) {
                     socketService.sendMessage(message);
                 }
+            }
+        });
+        goBluetoothButton = (Button) findViewById(R.id.goBluetoothButton);
+
+        goBluetoothButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,BluetoothFunActivity.class);
+                startActivity(intent);
             }
         });
     }

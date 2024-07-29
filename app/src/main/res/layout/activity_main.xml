@@ -17,6 +17,16 @@
         android:inputType="text"
         android:text="120.253.239.161"
         android:ems="10" />
+    <Button
+        android:id="@+id/goBluetoothButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="蓝牙配置"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.806" />
 
     <!-- Port Input -->
     <EditText
