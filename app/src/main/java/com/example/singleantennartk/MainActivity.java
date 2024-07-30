@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private SocketService socketService;
     private boolean isBound = false;
     Button goBluetoothButton;
+    Button goWebSocketButton;
 
     public static OutputStream outputStream=null;//获取输出数据
 
@@ -84,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 启动WebSocket服务
+        Intent serviceIntent = new Intent(this, WebSocketService.class);
+        startService(serviceIntent);
+
+
         ip = findViewById(R.id.ip);
         port = findViewById(R.id.port);
         out = findViewById(R.id.out);
@@ -92,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
         connect = findViewById(R.id.connect);
         send = findViewById(R.id.send);
         sendgga = findViewById(R.id.sendgga);
+
+        goBluetoothButton = (Button) findViewById(R.id.goBluetoothButton);
+        goWebSocketButton = (Button) findViewById(R.id.goWebSocketButton);
 
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,12 +142,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }}
         );
-        goBluetoothButton = (Button) findViewById(R.id.goBluetoothButton);
+
+
 
         goBluetoothButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,BluetoothFunActivity.class);
+                startActivity(intent);
+            }
+        });
+        goWebSocketButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,WebClientRTKActivity.class);
                 startActivity(intent);
             }
         });
@@ -160,5 +177,12 @@ public class MainActivity extends AppCompatActivity {
             isBound = false;
         }
         unregisterReceiver(messageReceiver);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //软件退出后清空，断开蓝牙操作
+        BluetoothFunActivity.connectThread.cancel();
+        BluetoothFunActivity.connectedThread.cancel();
     }
 }

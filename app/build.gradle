@@ -37,4 +37,16 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+    // 删除重复的 OkHttp 依赖，只保留最新版本
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    // 删除旧版本 OkHttp 依赖
+    // implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+
+    implementation 'org.java-websocket:Java-WebSocket:1.5.2'
+
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }
