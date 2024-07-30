@@ -32,23 +32,15 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="你干嘛"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SingleAntennaRTK"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".WebClientRTKActivity"
             android:exported="false" />
-
-        <service
-            android:name=".WebSocketService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".SocketService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name=".BluetoothFunActivity"
@@ -62,6 +54,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".WebSocketService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice"
+            tools:ignore="ForegroundServicePermission" />
+
+        <service
+            android:name=".SocketService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

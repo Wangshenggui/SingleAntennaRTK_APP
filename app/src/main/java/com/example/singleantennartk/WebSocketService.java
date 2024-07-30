@@ -1,6 +1,5 @@
 package com.example.singleantennartk;
 
-import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -114,7 +113,6 @@ public class WebSocketService extends Service {
         });
     }
 
-    @SuppressLint("ForegroundServiceType")
     private void startForegroundService() {
         // 创建前台服务通知
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
