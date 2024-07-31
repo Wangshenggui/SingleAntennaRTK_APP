@@ -90,18 +90,6 @@ public class RTKDataDisplayFragment extends Fragment {
         WebSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONObject data = new JSONObject();
-                String[] variables = {"command"};
-
-                try {
-                    // 给 n1 赋值
-                    data.put(variables[0], "write");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                String jsonMessage = data.toString();
-
                 Intent intent = new Intent("SendWebSocketMessage");
                 intent.putExtra("message", "{\"command\":\"write\"}");
                 requireContext().sendBroadcast(intent);
