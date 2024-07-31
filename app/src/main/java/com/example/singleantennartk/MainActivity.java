@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // 启动WebSocket服务
-        Intent WebserviceIntent = new Intent(this, SocketService.class);
+        Intent WebserviceIntent = new Intent(this, WebSocketService.class);
         startService(WebserviceIntent);
 
 
