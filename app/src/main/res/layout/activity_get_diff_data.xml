@@ -1,11 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".GetDiffDataActivity">
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+  <!-- IP Address Input -->
+  <EditText
+      android:id="@+id/CORSip"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Enter IP Address"
+      android:inputType="text"
+      android:text="120.253.239.161"
+      android:ems="10" />
+
+
+  <!-- Port Input -->
+  <EditText
+      android:id="@+id/CORSport"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="Enter Port"
+      android:inputType="number"
+      android:text="8002"
+      android:ems="6" />
+
+  <!-- Received Message Display 1 -->
+  <TextView
+      android:id="@+id/CORSreceive1"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Received Data 1"
+      android:paddingTop="10dp"
+      android:textSize="16sp" />
+
+  <!-- Connect Button -->
+  <Button
+      android:id="@+id/CORSconnect"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Connect"
+      android:layout_marginTop="16dp" />
+
+  <!-- Send Button -->
+  <Button
+      android:id="@+id/CORSsend"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Send"
+      android:layout_marginTop="16dp" />
+
+  <Button
+      android:id="@+id/CORSsendgga"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="Sendgga"
+      android:layout_marginTop="16dp" />
+
+</LinearLayout>
