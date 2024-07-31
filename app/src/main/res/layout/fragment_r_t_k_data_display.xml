@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".RTKSettingFragment.RTKDataDisplayFragment">
+    tools:context=".WebClientRTKFragment.RTKDataDisplayFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/Toolbar"
@@ -30,28 +30,16 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/gotoDiffCccountSettingButton"
+        android:id="@+id/WebSendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="差分账号设置"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/gotoRTKSettingButton"
-        app:layout_constraintHorizontal_bias="0.378"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/webView"
-        app:layout_constraintVertical_bias="0.519" />
-
-    <Button
-        android:id="@+id/gotoRTKSettingButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="RTK输出设置"
+        android:text="发送测试按钮"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.843"
+        app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/webView"
-        app:layout_constraintVertical_bias="0.519" />
+        app:layout_constraintVertical_bias="0.75" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
