@@ -1,8 +1,12 @@
 package com.example.singleantennartk;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -32,6 +36,7 @@ public class SocketService extends Service {
     public void onCreate() {
         super.onCreate();
         mainHandler = new Handler(Looper.getMainLooper());
+        startForegroundService();
     }
 
     @Override
@@ -45,7 +50,32 @@ public class SocketService extends Service {
         }
     }
 
-    // Method to connect to the server
+    // 启动前台服务的方法
+    private void startForegroundService() {
+        // 创建通知频道并启动前台服务以防止服务被系统杀掉
+        // 创建通知频道并启动前台服务以防止服务被系统杀掉
+        NotificationChannel channel = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channel = new NotificationChannel("socket_channel", "Socket Service", NotificationManager.IMPORTANCE_DEFAULT);
+        }
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            manager.createNotificationChannel(channel);
+        }
+
+        Notification.Builder builder = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            builder = new Notification.Builder(this, "socket_channel")
+                    .setContentTitle("Socket Service")
+                    .setContentText("Running...")
+                    .setSmallIcon(R.drawable.ic_back);
+        }
+
+        Notification notification = builder.build();
+        startForeground(1, notification);
+    }
+
+    // 连接服务器的方法
     public void connectToServer(String ipAddress, int port) {
         socketThread = new Thread(() -> {
             try {
@@ -53,22 +83,22 @@ public class SocketService extends Service {
                 outputStream = socket.getOutputStream();
                 inputStream = socket.getInputStream();
 
-                // Show a toast message
+                // 显示一个Toast消息
                 showToast("已连接服务器");
 
-                // Start reading from the socket
+                // 开始从套接字读取
                 readFromSocket();
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Connection failed: " + e.getMessage());
+                Log.e(TAG, "连接失败: " + e.getMessage());
                 showToast("连接失败");
             }
         });
         socketThread.start();
     }
 
-    // Method to send messages to the server
+    // 发送消息到服务器的方法
     public void sendMessage(String message) {
         if (socket != null && outputStream != null) {
             new Thread(() -> {
@@ -78,16 +108,16 @@ public class SocketService extends Service {
                     showToast("消息已发送");
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "Failed to send message: " + e.getMessage());
-                    showToast("发送消息失败");
+                    Log.e(TAG, "消息发送失败: " + e.getMessage());
+                    showToast("消息发送失败");
                 }
             }).start();
         } else {
-            showToast("套接字未被连接");
+            showToast("套接字未连接");
         }
     }
 
-    // Method to read messages from the server
+    // 从服务器读取消息的方法
     private void readFromSocket() {
         if (inputStream != null) {
             try {
@@ -95,31 +125,31 @@ public class SocketService extends Service {
                 int bytes;
                 while ((bytes = inputStream.read(buffer)) != -1) {
                     String message = new String(buffer, 0, bytes, StandardCharsets.UTF_8);
-                    Log.d(TAG, "Message received: " + message);
+                    Log.d(TAG, "收到信息: " + message);
                     showToast("收到信息: " + message);
 
-                    // Broadcast the message
+                    // 广播消息
                     Intent intent = new Intent("com.example.ble.RECEIVE_MESSAGE");
                     intent.putExtra("message", message);
                     sendBroadcast(intent);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Failed to read from socket: " + e.getMessage());
+                Log.e(TAG, "从套接字读取失败: " + e.getMessage());
                 showToast("从套接字读取失败");
             }
         }
     }
 
     private void showToast(final String message) {
-        // Ensure Toast runs on the main UI thread
+        // 确保Toast在主UI线程上运行
         mainHandler.post(() -> {
-            // Cancel the previous toast if it's still being displayed
+            // 如果前一个toast还在显示，取消它
             if (currentToast != null) {
                 currentToast.cancel();
             }
 
-            // Create and show a new toast
+            // 创建并显示一个新的toast
             currentToast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
             currentToast.show();
         });
@@ -135,7 +165,7 @@ public class SocketService extends Service {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e(TAG, "Failed to close socket: " + e.getMessage());
+            Log.e(TAG, "关闭套接字失败: " + e.getMessage());
             showToast("关闭套接字失败");
         }
     }

@@ -41,7 +41,6 @@
         <activity
             android:name=".WebClientRTKActivity"
             android:exported="false" />
-
         <activity
             android:name=".BluetoothFunActivity"
             android:exported="false" />
@@ -60,11 +59,12 @@
             android:exported="false"
             android:foregroundServiceType="connectedDevice"
             tools:ignore="ForegroundServicePermission" />
-
         <service
             android:name=".SocketService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice"
+            tools:ignore="ForegroundServicePermission" />
     </application>
 
 </manifest>

@@ -62,8 +62,8 @@ function connectWebSocket() {
         // 更新经度和纬度文本元素
         var lonElement = document.querySelector('.text-lon');
         var latElement = document.querySelector('.text-lat');
-        lonElement.textContent = '经度: ' + longitude.toFixed(10);
-        latElement.textContent = '纬度: ' + latitude.toFixed(10);
+        lonElement.textContent = '经度: ' + longitude.toFixed(10)/10;
+        latElement.textContent = '纬度: ' + latitude.toFixed(10)/10;
         //更新速度
         var km_hElement = document.querySelector('.text-speedkmh');
         var m_sElement = document.querySelector('.text-speedms');

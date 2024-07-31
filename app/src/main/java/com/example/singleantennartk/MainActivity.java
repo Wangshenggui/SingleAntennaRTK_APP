@@ -14,33 +14,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText ip, port, out;
     private TextView receive1, receive2;
-    private Button connect, send,sendgga;
+    private Button connect, send, sendgga;
     private SocketService socketService;
     private boolean isBound = false;
     Button goBluetoothButton;
     Button goWebSocketButton;
-
     public static OutputStream outputStream=null;//获取输出数据
 
+    // 服务连接
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -55,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // 广播接收器，接收来自SocketService的消息
     private final BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -85,10 +78,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 启动WebSocket服务
-        Intent serviceIntent = new Intent(this, WebSocketService.class);
+        // 启动Socket服务
+        Intent serviceIntent = new Intent(this, SocketService.class);
         startService(serviceIntent);
-
 
         ip = findViewById(R.id.ip);
         port = findViewById(R.id.port);
@@ -99,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         send = findViewById(R.id.send);
         sendgga = findViewById(R.id.sendgga);
 
-        goBluetoothButton = (Button) findViewById(R.id.goBluetoothButton);
-        goWebSocketButton = (Button) findViewById(R.id.goWebSocketButton);
+        goBluetoothButton = findViewById(R.id.goBluetoothButton);
+        goWebSocketButton = findViewById(R.id.goWebSocketButton);
 
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 String ipAddress = ip.getText().toString();
                 String portString = port.getText().toString();
                 if (ipAddress.isEmpty() || portString.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Please enter IP and Port", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "请输入IP和端口", Toast.LENGTH_SHORT).show();
                 } else {
                     int portNumber = Integer.parseInt(portString);
                     if (isBound) {
@@ -132,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         sendgga.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,22 +133,21 @@ public class MainActivity extends AppCompatActivity {
                 if (isBound) {
                     socketService.sendMessage(message);
                 }
-            }}
-        );
-
-
+            }
+        });
 
         goBluetoothButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,BluetoothFunActivity.class);
+                Intent intent = new Intent(MainActivity.this, BluetoothFunActivity.class);
                 startActivity(intent);
             }
         });
+
         goWebSocketButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,WebClientRTKActivity.class);
+                Intent intent = new Intent(MainActivity.this, WebClientRTKActivity.class);
                 startActivity(intent);
             }
         });
@@ -178,10 +170,11 @@ public class MainActivity extends AppCompatActivity {
         }
         unregisterReceiver(messageReceiver);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //软件退出后清空，断开蓝牙操作
+        // 软件退出后清空，断开蓝牙操作
         BluetoothFunActivity.connectThread.cancel();
         BluetoothFunActivity.connectedThread.cancel();
     }
