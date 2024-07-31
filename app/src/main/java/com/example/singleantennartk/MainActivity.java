@@ -78,9 +78,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 启动WebSocket服务
+        Intent WebSocketserviceIntent = new Intent(this, WebSocketService.class);
+        startService(WebSocketserviceIntent);
+
         // 启动Socket服务
-        Intent serviceIntent = new Intent(this, SocketService.class);
-        startService(serviceIntent);
+        Intent SocketserviceIntent = new Intent(this, SocketService.class);
+        startService(SocketserviceIntent);
 
         ip = findViewById(R.id.ip);
         port = findViewById(R.id.port);
