@@ -53,6 +53,8 @@ public class DataAcceptanceFragment extends Fragment {
     private static int totalBytesReceived = 0;
     static int count=0;
 
+    static int xxx=0;
+
     public DataAcceptanceFragment() {
         // Required empty public constructor
     }
@@ -108,6 +110,8 @@ public class DataAcceptanceFragment extends Fragment {
     // 定义处理接收到的数据的方法
     @SuppressLint("SetTextI18n")
     public static void processReceivedData(byte[] buffer, int bytes) {
+
+        ReceiveTextView.setText(" " + xxx++);
         // 确保 RxData 的大小足够存储所有接收到的数据
         if (RxData == null) {
             RxData = new byte[1024 * 3]; // 假设每次接收的数据大小不超过 bytes
