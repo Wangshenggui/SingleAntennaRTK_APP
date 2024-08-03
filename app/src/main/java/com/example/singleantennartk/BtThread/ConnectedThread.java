@@ -3,6 +3,7 @@ package com.example.singleantennartk.BtThread;
 import android.bluetooth.BluetoothSocket;
 
 import com.example.singleantennartk.BluetoothFunFragment.DataAcceptanceFragment;
+import com.example.singleantennartk.GetDiffDataActivity;
 import com.example.singleantennartk.MainActivity;
 
 import java.io.BufferedInputStream;
@@ -15,6 +16,10 @@ import java.util.Arrays;
 
 //连接了蓝牙设备建立通信之后的数据交互线程类
 public class ConnectedThread extends Thread{
+
+    // 全局字符串变量
+    public static String globalString = "Initial Value";
+
 
     BluetoothSocket bluetoothSocket=null;
     InputStream inputStream=null;//获取输入数据
@@ -71,6 +76,10 @@ public class ConnectedThread extends Thread{
                     if (gnggaEndIndex != -1) {
                         String gnggaFrame = receivedData.substring(gnggaIndex, gnggaEndIndex);
                         DataAcceptanceFragment.processReceivedData(gnggaFrame.getBytes(), bytesRead);
+//                        GetDiffDataActivity.processReceivedData(gnggaFrame.getBytes(), bytesRead);
+                        String string = new String(gnggaFrame.getBytes());
+                        globalString=null;
+                        globalString = string;
                         byteArrayOutputStream.reset();
                         receivedData = receivedData.substring(gnggaEndIndex + 2); // Skip \r\n
                         byteArrayOutputStream.write(receivedData.getBytes("UTF-8"));
@@ -83,6 +92,7 @@ public class ConnectedThread extends Thread{
                     if (gnrmcEndIndex != -1) {
                         String gnrmcFrame = receivedData.substring(gnrmcIndex, gnrmcEndIndex);
                         DataAcceptanceFragment.processReceivedData(gnrmcFrame.getBytes(), bytesRead);
+//                        GetDiffDataActivity.processReceivedData(gnrmcFrame.getBytes(), bytesRead);
                         byteArrayOutputStream.reset();
                         receivedData = receivedData.substring(gnrmcEndIndex + 2); // Skip \r\n
                         byteArrayOutputStream.write(receivedData.getBytes("UTF-8"));

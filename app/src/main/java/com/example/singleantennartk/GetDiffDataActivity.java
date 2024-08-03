@@ -20,6 +20,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.singleantennartk.BtThread.ConnectedThread;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,7 +81,9 @@ public class GetDiffDataActivity extends AppCompatActivity {
                 String message = "$GNGGA,054704.00,2623.00740643,N,10636.51117030,E,1,08,1.9,1218.1202,M,-29.1518,M,,*65\r\n";
 
                 if (isBound) {
-                    socketService.sendMessage(message);
+//                    socketService.sendMessage(message);
+                    socketService.sendMessage(ConnectedThread.globalString + "\r\n");
+                    receive1.setText(ConnectedThread.globalString + "\r\n");
                 }
             }
         });
@@ -105,7 +109,7 @@ public class GetDiffDataActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra("message");
-            receive1.setText(message);
+//            receive1.setText(message);
         }
     };
 
