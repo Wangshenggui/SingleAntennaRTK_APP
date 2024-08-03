@@ -6,9 +6,11 @@ import com.example.singleantennartk.BluetoothFunFragment.DataAcceptanceFragment;
 import com.example.singleantennartk.MainActivity;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 //连接了蓝牙设备建立通信之后的数据交互线程类
@@ -37,37 +39,61 @@ public class ConnectedThread extends Thread{
 
     public void run() {
         try {
-            // Wrap the InputStream with BufferedInputStream for better performance
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-            byte[] buffer = new byte[1024]; // Buffer to store the incoming data
-            int bytesRead; // Bytes read in each iteration
+            byte[] buffer = new byte[1024];
+            int bytesRead;
 
-            // Keep listening to the InputStream until an exception occurs
             while (true) {
-                // Read from the BufferedInputStream
+                // Read from the input stream
                 bytesRead = bufferedInputStream.read(buffer);
 
-                // If bytesRead is -1, it means the end of the stream has been reached
                 if (bytesRead == -1) {
-                    break; // Exit the loop
+                    break; // End of stream reached
                 }
 
-                // Now you have the received data in buffer up to bytesRead,
-                // you can process it as needed
-                // For example, you can send it to the UI for display or perform any other actions
-                // Example: Send the received data to MainActivity for processing
-                DataAcceptanceFragment.processReceivedData(buffer, bytesRead);
+                // Write the received data to a ByteArrayOutputStream
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+
+                // Convert the ByteArrayOutputStream to a string for easier manipulation
+                String receivedData = byteArrayOutputStream.toString("UTF-8");
+
+                // Check if we have a complete $GNGGA frame
+                int gnggaIndex = receivedData.indexOf("$GNGGA");
+                // Check if we have a complete $GNRMC frame
+                int gnrmcIndex = receivedData.indexOf("$GNRMC");
+
+                if (gnggaIndex != -1) {
+                    // Find the end of the frame, assuming a newline character
+                    int gnggaEndIndex = receivedData.indexOf("\r\n", gnggaIndex);
+
+                    if (gnggaEndIndex != -1) {
+                        String gnggaFrame = receivedData.substring(gnggaIndex, gnggaEndIndex);
+                        DataAcceptanceFragment.processReceivedData(gnggaFrame.getBytes(), bytesRead);
+                        byteArrayOutputStream.reset();
+                        receivedData = receivedData.substring(gnggaEndIndex + 2); // Skip \r\n
+                        byteArrayOutputStream.write(receivedData.getBytes("UTF-8"));
+                    }
+                }
+                if (gnrmcIndex != -1) {
+                    // Find the end of the frame, assuming a newline character
+                    int gnrmcEndIndex = receivedData.indexOf("\r\n", gnrmcIndex);
+
+                    if (gnrmcEndIndex != -1) {
+                        String gnrmcFrame = receivedData.substring(gnrmcIndex, gnrmcEndIndex);
+                        DataAcceptanceFragment.processReceivedData(gnrmcFrame.getBytes(), bytesRead);
+                        byteArrayOutputStream.reset();
+                        receivedData = receivedData.substring(gnrmcEndIndex + 2); // Skip \r\n
+                        byteArrayOutputStream.write(receivedData.getBytes("UTF-8"));
+                    }
+                }
             }
 
         } catch (IOException e) {
-            // If an exception occurs, print the stack trace
             e.printStackTrace();
         }
     }
-
-
-
 
     public void btWriteInt(int[] intData){
         for(int sendInt:intData){
@@ -78,7 +104,7 @@ public class ConnectedThread extends Thread{
     }
 
     //自定义的发送字符串的函数
-    public void btWriteString(String string){
+    public static void btWriteString(String string){
         for(byte sendData:string.getBytes()){
             try {
                 MainActivity.outputStream.write(sendData);//outputStream发送字节的函数

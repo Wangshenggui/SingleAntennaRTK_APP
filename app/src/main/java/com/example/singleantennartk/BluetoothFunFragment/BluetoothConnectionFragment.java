@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.singleantennartk.BtThread.ConnectedThread;
 import com.example.singleantennartk.R;
 
 import java.util.ArrayList;
@@ -159,6 +160,29 @@ public class BluetoothConnectionFragment extends Fragment {
                         }
                         readyDevices.get(position).getName();
                         Toast.makeText(getActivity(),"已连接"+readyDevices.get(position).getName()+"\r\n开启数据线程",Toast.LENGTH_SHORT).show();
+                        ConnectedThread.btWriteString("$PAIR062,3,0*3D\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,2,0*3C\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,5,0*3B\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,1,0*3F\r\n");
+
+                        ConnectedThread.btWriteString("$PAIR062,3,0*3D\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,2,0*3C\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,5,0*3B\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,1,0*3F\r\n");
+
+                        ConnectedThread.btWriteString("$PAIR062,3,0*3D\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,2,0*3C\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,5,0*3B\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,1,0*3F\r\n");
+
+                        ConnectedThread.btWriteString("$PAIR062,3,0*3D\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,2,0*3C\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,5,0*3B\r\n");
+                        ConnectedThread.btWriteString("$PAIR062,1,0*3F\r\n");
+//                        $PAIR062,3,0*3D
+//                        $PAIR062,2,0*3C
+//                        $PAIR062,5,0*3B
+//                        $PAIR062,1,0*3F
                         break;
                     }
                     delayCount++;
