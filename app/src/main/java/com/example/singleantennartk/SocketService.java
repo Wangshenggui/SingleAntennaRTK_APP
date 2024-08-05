@@ -13,11 +13,14 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.singleantennartk.BtThread.ConnectedThread;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class SocketService extends Service {
 
@@ -122,24 +125,44 @@ public class SocketService extends Service {
         if (inputStream != null) {
             try {
                 byte[] buffer = new byte[2048];
-                int bytes;
-                while ((bytes = inputStream.read(buffer)) != -1) {
-                    String message = new String(buffer, 0, bytes, StandardCharsets.UTF_8);
-                    Log.d(TAG, "收到信息: " + message);
-                    showToast("收到信息: " + message);
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    // Process raw byte data directly
+                    // For example, you might want to convert it to hex or base64
+                    byte[] rawMessage = Arrays.copyOf(buffer, bytesRead);
 
-                    // 广播消息
-                    Intent intent = new Intent("com.example.ble.RECEIVE_MESSAGE");
-                    intent.putExtra("message", message);
+                    // Logging raw data (optional)
+                    String rawHexData = bytesToHex(rawMessage);
+                    showToast("Received raw data: " + rawHexData);
+
+
+                    MainActivity.outputStream.write(rawMessage);
+
+                    // Example: Toast the length of the received raw data
+//                    showToast("Received raw data, length: " + rawMessage.length);
+
+                    // Broadcast the raw data if needed
+                    Intent intent = new Intent("com.example.ble.RECEIVE_RAW_DATA");
+                    intent.putExtra("rawData", rawMessage);
                     sendBroadcast(intent);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "从套接字读取失败: " + e.getMessage());
-                showToast("从套接字读取失败");
+                Log.e(TAG, "Failed to read from socket: " + e.getMessage());
+                showToast("Failed to read from socket");
             }
         }
     }
+
+    // Utility method to convert bytes to hexadecimal string representation
+    private static String bytesToHex(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X ", b));
+        }
+        return sb.toString().trim();
+    }
+
 
     private void showToast(final String message) {
         // 确保Toast在主UI线程上运行

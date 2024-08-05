@@ -110,6 +110,7 @@ public class GetDiffDataActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String message = intent.getStringExtra("message");
 //            receive1.setText(message);
+//            ConnectedThread.btWriteString(message);
         }
     };
 
