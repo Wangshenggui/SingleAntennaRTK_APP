@@ -71,6 +71,7 @@ public class GetDiffDataActivity extends AppCompatActivity {
 
                 if (isBound) {
                     socketService.sendMessage(message);
+                    SocketService.start_flag=true;
                 }
             }
         });

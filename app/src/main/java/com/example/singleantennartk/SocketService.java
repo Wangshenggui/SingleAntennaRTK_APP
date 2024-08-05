@@ -35,11 +35,38 @@ public class SocketService extends Service {
     private Toast currentToast;
     private Handler mainHandler = new Handler(Looper.getMainLooper());
 
+    // 定时器变量
+    private static final long TIMER_INTERVAL = 1000; // 60秒
+    private Handler timerHandler;
+    private Runnable timerRunnable;
+    public static boolean start_flag=false;
     @Override
     public void onCreate() {
         super.onCreate();
         mainHandler = new Handler(Looper.getMainLooper());
         startForegroundService();
+        // 初始化定时器处理器和运行任务
+        timerHandler = new Handler();
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // 在这里执行定期任务
+                // 例如，可以检查套接字连接状态
+                if (socket != null && socket.isConnected() && start_flag) {
+                    // 执行某些操作
+                    Log.d(TAG, "套接字已连接");
+//                    showToast(ConnectedThread.globalString);
+
+                    sendMessage(ConnectedThread.globalString + "\r\n");
+                }
+
+                // 重新安排定时任务
+                timerHandler.postDelayed(this, TIMER_INTERVAL);
+            }
+        };
+
+        // 第一次启动定时器
+        timerHandler.postDelayed(timerRunnable, TIMER_INTERVAL);
     }
 
     @Override
@@ -108,7 +135,7 @@ public class SocketService extends Service {
                 try {
                     outputStream.write(message.getBytes(StandardCharsets.UTF_8));
                     outputStream.flush();
-                    showToast("消息已发送");
+//                    showToast("消息已发送");
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e(TAG, "消息发送失败: " + e.getMessage());
@@ -127,34 +154,28 @@ public class SocketService extends Service {
                 byte[] buffer = new byte[2048];
                 int bytesRead;
                 while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    // Process raw byte data directly
-                    // For example, you might want to convert it to hex or base64
+                    // 直接处理原始字节数据
+                    // 例如，您可能希望将其转换为十六进制或Base64
                     byte[] rawMessage = Arrays.copyOf(buffer, bytesRead);
 
-                    // Logging raw data (optional)
-                    String rawHexData = bytesToHex(rawMessage);
-                    showToast("Received raw data: " + rawHexData);
+                    // 记录原始数据（可选）
+//                    String rawHexData = bytesToHex(rawMessage);
 
-
+                    // 通过蓝牙发送数据到RTK的示例
                     MainActivity.outputStream.write(rawMessage);
 
-                    // Example: Toast the length of the received raw data
-//                    showToast("Received raw data, length: " + rawMessage.length);
-
-                    // Broadcast the raw data if needed
-                    Intent intent = new Intent("com.example.ble.RECEIVE_RAW_DATA");
-                    intent.putExtra("rawData", rawMessage);
-                    sendBroadcast(intent);
+                    // 示例：Toast显示接收到的原始数据长度
+//                    showToast("接收到原始数据，长度: " + rawMessage.length);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Failed to read from socket: " + e.getMessage());
-                showToast("Failed to read from socket");
+                Log.e(TAG, "从套接字读取失败: " + e.getMessage());
+                showToast("从套接字读取失败");
             }
         }
     }
 
-    // Utility method to convert bytes to hexadecimal string representation
+    // 将字节数组转换为十六进制字符串表示的实用方法
     private static String bytesToHex(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
         for (byte b : bytes) {
@@ -163,7 +184,7 @@ public class SocketService extends Service {
         return sb.toString().trim();
     }
 
-
+    // 在主UI线程上显示Toast消息的方法
     private void showToast(final String message) {
         // 确保Toast在主UI线程上运行
         mainHandler.post(() -> {
@@ -191,5 +212,7 @@ public class SocketService extends Service {
             Log.e(TAG, "关闭套接字失败: " + e.getMessage());
             showToast("关闭套接字失败");
         }
+        // 停止服务时移除定时器任务
+        timerHandler.removeCallbacks(timerRunnable);
     }
 }
