@@ -70,7 +70,7 @@ public class SocketService extends Service {
                     String check=Integer.toHexString(x);
 
                     if(check.equalsIgnoreCase(s)){
-                        showToast(BluetoothFunActivity.ReadGGAString);
+//                        showToast(BluetoothFunActivity.ReadGGAString);
                         sendMessage(BluetoothFunActivity.ReadGGAString + "\r\n");
                     }
                 }

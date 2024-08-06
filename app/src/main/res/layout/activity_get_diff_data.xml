@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,57 +9,222 @@
     android:orientation="vertical"
     tools:context=".GetDiffDataActivity">
 
-  <!-- IP Address Input -->
-  <EditText
-      android:id="@+id/CORSip"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="Enter IP Address"
-      android:inputType="text"
-      android:text="120.253.239.161"
-      android:ems="10" />
-
-
-  <!-- Port Input -->
-  <EditText
-      android:id="@+id/CORSport"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:hint="Enter Port"
-      android:inputType="number"
-      android:text="8002"
-      android:ems="6" />
-
-  <!-- Received Message Display 1 -->
   <TextView
-      android:id="@+id/CORSreceive1"
-      android:layout_width="match_parent"
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Received Data 1"
-      android:paddingTop="10dp"
-      android:textSize="16sp" />
+      android:text="差分账号配置"
+      android:textSize="30dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.023" />
 
-  <!-- Connect Button -->
+  <TextView
+      android:id="@+id/eNodeBtextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="36dp"
+      android:elevation="4dp"
+      android:padding="5dp"
+      android:text="基站"
+      android:textSize="20dp"
+      app:layout_constraintEnd_toStartOf="@+id/horizontalScrollView1"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+  <TextView
+      android:id="@+id/PorttextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="20dp"
+      android:elevation="4dp"
+      android:padding="5dp"
+      android:text="端口"
+      android:textSize="20dp"
+      app:layout_constraintEnd_toEndOf="@+id/horizontalScrollView2"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/eNodeBtextView" />
+
+
+  <TextView
+      android:id="@+id/MountPointtextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:elevation="4dp"
+      android:padding="5dp"
+      android:text="挂载点"
+      android:textSize="20dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.05"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/PorttextView" />
+
+  <Spinner
+      android:id="@+id/spinner"
+      android:layout_width="253dp"
+      android:layout_height="42dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginTop="17dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.018"
+      app:layout_constraintStart_toEndOf="@+id/MountPointtextView"
+      app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView2" />
+
+  <HorizontalScrollView
+      android:id="@+id/horizontalScrollView1"
+      android:layout_width="249dp"
+      android:layout_height="42dp"
+      android:layout_marginTop="36dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.74"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView">
+
+    <RadioGroup
+        android:id="@+id/radioGroup1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <RadioButton
+          android:id="@+id/RadioYiDongeNodeBButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="移动"
+          android:textSize="20dp" />
+
+      <!-- 添加一个空白的View作为间隔 -->
+      <View
+          android:layout_width="30dp"
+          android:layout_height="match_parent" />
+
+      <RadioButton
+          android:id="@+id/RadioQianXuneNodeBButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="千寻"
+          android:textSize="20dp" />
+
+    </RadioGroup>
+  </HorizontalScrollView>
+
+  <HorizontalScrollView
+      android:id="@+id/horizontalScrollView2"
+      android:layout_width="237dp"
+      android:layout_height="42dp"
+      android:layout_marginTop="16dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.689"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView1">
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <RadioButton
+          android:id="@+id/Radio8001eNodeBButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="8001"
+          android:textSize="20dp" />
+
+      <!-- 添加一个空白的View作为间隔 -->
+      <View
+          android:layout_width="22dp"
+          android:layout_height="match_parent" />
+
+      <RadioButton
+          android:id="@+id/Radio8002eNodeBButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="8002"
+          android:textSize="20dp" />
+
+    </RadioGroup>
+  </HorizontalScrollView>
+
+  <TextView
+      android:id="@+id/AccounttextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:elevation="4dp"
+      android:padding="5dp"
+      android:text="账号: "
+      android:textSize="20dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.048"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/MountPointtextView" />
+
+  <EditText
+      android:id="@+id/AccounteditText"
+      android:layout_width="262dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="20dp"
+      android:hint="输入账号"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.38"
+      app:layout_constraintStart_toEndOf="@+id/AccounttextView"
+      app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
+  <TextView
+      android:id="@+id/PasswordtextView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:elevation="4dp"
+      android:padding="5dp"
+      android:text="密码: "
+
+      android:textSize="20dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.048"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/AccounttextView" />
+
+  <EditText
+      android:id="@+id/PasswordeditText"
+      android:layout_width="241dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="16dp"
+      android:hint="输入密码"
+      android:inputType="textPassword"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.293"
+      app:layout_constraintStart_toEndOf="@+id/PasswordtextView"
+      app:layout_constraintTop_toBottomOf="@+id/AccounteditText" />
+
+  <CheckBox
+      android:id="@+id/showPasswordCheckBox"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="16dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.44"
+      app:layout_constraintStart_toEndOf="@+id/PasswordeditText"
+      app:layout_constraintTop_toBottomOf="@+id/AccounteditText" />
+
   <Button
-      android:id="@+id/CORSconnect"
-      android:layout_width="match_parent"
+      android:id="@+id/SendDiffAccountButton"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Connect"
-      android:layout_marginTop="16dp" />
+      android:text="发送设置信息"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.498"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/PasswordtextView"
+      app:layout_constraintVertical_bias="0.156" />
 
-  <!-- Send Button -->
-  <Button
-      android:id="@+id/CORSsend"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="Send"
-      android:layout_marginTop="16dp" />
-
-  <Button
-      android:id="@+id/CORSsendgga"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="Sendgga"
-      android:layout_marginTop="16dp" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
