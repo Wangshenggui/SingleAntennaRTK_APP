@@ -54,10 +54,25 @@ public class SocketService extends Service {
                 // 例如，可以检查套接字连接状态
                 if (socket != null && socket.isConnected() && start_flag) {
                     // 执行某些操作
-                    Log.d(TAG, "套接字已连接");
-//                    showToast(ConnectedThread.globalString);
+                    String checkout_str = BluetoothFunActivity.ReadGGAString;
+                    String str = checkout_str.substring(0,checkout_str.length()-3);
 
-                    sendMessage(ConnectedThread.globalString + "\r\n");
+                    String s = checkout_str.substring(checkout_str.length()-2);
+
+                    char ch=str.charAt(1);
+                    int x=(int)ch;
+                    int y;
+                    for(int i=2;i<str.length();i++){
+                        y=(int)str.charAt(i);
+                        x=x^y;
+                    }
+                    //转换成十六进制形式
+                    String check=Integer.toHexString(x);
+
+                    if(check.equalsIgnoreCase(s)){
+                        showToast(BluetoothFunActivity.ReadGGAString);
+                        sendMessage(BluetoothFunActivity.ReadGGAString + "\r\n");
+                    }
                 }
 
                 // 重新安排定时任务

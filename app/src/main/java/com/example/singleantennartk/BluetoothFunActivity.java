@@ -20,6 +20,10 @@ import java.util.UUID;
 
 public class BluetoothFunActivity extends AppCompatActivity {
 
+    // 全局字符串变量
+    public static String ReadGGAString = "GGA";
+    public static String ReadRMCString = "RMC";
+
     public static ConnectThread connectThread;
     public static ConnectThread connectedThread;
     private BottomNavigationView mNavigationView;
@@ -94,4 +98,6 @@ public class BluetoothFunActivity extends AppCompatActivity {
         }
         transaction.commitAllowingStateLoss();
     }
+
+
 }

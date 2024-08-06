@@ -15,48 +15,39 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.singleantennartk.BluetoothFunActivity;
 import com.example.singleantennartk.BtThread.ConnectedThread;
 import com.example.singleantennartk.R;
+import com.example.singleantennartk.SocketService;
 
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link DataAcceptanceFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import android.os.Handler;
+
 public class DataAcceptanceFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    private static TextView ReceiveTextView=null;
+    private static TextView ReceiveGGATextView=null;
+    private static TextView ReceiveRMCTextView=null;
     static int text_n=0;
 
-    private static Button SendTestButton=null;
+    private Handler handler;
+    private Runnable runnable;
+    private static final long TIMER_DELAY = 500; // 定时器延迟执行时间，单位为毫秒
+
 
     public DataAcceptanceFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DataAcceptanceFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static DataAcceptanceFragment newInstance(String param1, String param2) {
         DataAcceptanceFragment fragment = new DataAcceptanceFragment();
         Bundle args = new Bundle();
@@ -82,55 +73,37 @@ public class DataAcceptanceFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_data_acceptance, container, false);
 
-        ReceiveTextView=view.findViewById(R.id.ReceiveTextView);
-        SendTestButton=view.findViewById(R.id.SendTestButton);
+        ReceiveGGATextView=view.findViewById(R.id.ReceiveGGATextView);
+        ReceiveRMCTextView=view.findViewById(R.id.ReceiveRMCTextView);
 
-        SendTestButton();
+        // 初始化 Handler
+        handler = new Handler();
 
+        // 创建一个定时执行的 Runnable
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                // 在这里执行定时任务的操作
+                // 例如更新 UI 或执行其他逻辑
+
+                // 示例：每隔一定时间更新一次文本
+                text_n++;
+                ReceiveGGATextView.setText(BluetoothFunActivity.ReadGGAString);
+                ReceiveRMCTextView.setText(BluetoothFunActivity.ReadRMCString);
+
+                // 再次调度定时任务
+                handler.postDelayed(this, TIMER_DELAY);
+            }
+        };
+
+        // 第一次调度定时任务
+        handler.postDelayed(runnable, TIMER_DELAY);
         return view;
     }
-
-
-
-
-    private void SendTestButton() {
-        SendTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(),"草泥马",Toast.LENGTH_SHORT).show();
-
-                ConnectedThread.btWriteString("nimade");
-            }
-        });
-    }
-
-    // 定义处理接收到的数据的方法
-    @SuppressLint("SetTextI18n")
-    public static void processReceivedData(byte[] buffer, int bytes) {
-
-        String string = new String(buffer);
-
-        if (string.startsWith("$GNGGA")) {
-            text_n++;
-            ReceiveTextView.setText(text_n + string);
-        } else {
-            // Handle case when data does not start with "$GNGGA"
-            // For example, log or ignore this data
-//            ReceiveTextView.setText(text_n + string);
-        }
-    }
-
-    public static int findCharacter(byte[] data, byte target) {
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] == target) {
-                return i; // 找到目标字符，返回其索引
-            }
-        }
-        return -1; // 如果没有找到目标字符，返回 -1
-    }
-    public static double bytesToDouble(byte[] bytes, int index) {
-        ByteBuffer buffer = ByteBuffer.wrap(bytes, index, 8);
-        buffer.order(ByteOrder.LITTLE_ENDIAN); // 如果数据是小端字节序
-        return buffer.getDouble();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // 移除所有未执行的回调以防止内存泄漏
+        handler.removeCallbacks(runnable);
     }
 }

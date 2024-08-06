@@ -83,8 +83,8 @@ public class GetDiffDataActivity extends AppCompatActivity {
 
                 if (isBound) {
 //                    socketService.sendMessage(message);
-                    socketService.sendMessage(ConnectedThread.globalString + "\r\n");
-                    receive1.setText(ConnectedThread.globalString + "\r\n");
+                    socketService.sendMessage(BluetoothFunActivity.ReadGGAString + "\r\n");
+                    receive1.setText(BluetoothFunActivity.ReadGGAString + "\r\n");
                 }
             }
         });
