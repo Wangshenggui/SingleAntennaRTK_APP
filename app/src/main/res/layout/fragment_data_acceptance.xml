@@ -23,5 +23,23 @@
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="0dp" />
 
+    <TextView
+        android:id="@+id/lonText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="经度: "
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/ReceiveRMCTextView"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/latText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="纬度: "
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/lonText"
+        tools:layout_editor_absoluteX="0dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

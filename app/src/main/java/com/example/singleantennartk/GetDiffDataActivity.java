@@ -64,22 +64,6 @@ public class GetDiffDataActivity extends AppCompatActivity {
 
         SendDiffAccountButton = findViewById(R.id.SendDiffAccountButton);
 
-//        send.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String message = "GET /" +
-//                        "RTCM33_GRCEpro" +
-//                        " HTTP/1.0\r\nUser-Agent: NTRIP GNSSInternetRadio/1.4.10\r\nAccept: */*\r\nConnection: close\r\nAuthorization: Basic " +
-//                        "Y2VkcjIxNTEzOmZ5eDY5NzQ2" +
-//                        "\r\n\r\n";
-//
-//                if (isBound) {
-//                    socketService.sendMessage(message);
-//                    SocketService.start_flag=true;
-//                }
-//            }
-//        });
-
 
         radioGroup1 = findViewById(R.id.radioGroup1);
         radioGroup2 = findViewById(R.id.radioGroup2);
