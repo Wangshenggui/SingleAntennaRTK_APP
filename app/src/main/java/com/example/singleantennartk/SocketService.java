@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -70,8 +71,10 @@ public class SocketService extends Service {
                     String check=Integer.toHexString(x);
 
                     if(check.equalsIgnoreCase(s)){
-//                        showToast(BluetoothFunActivity.ReadGGAString);
+                        showToast("-");
                         sendMessage(BluetoothFunActivity.ReadGGAString + "\r\n");
+
+
                     }
                 }
 
@@ -145,22 +148,43 @@ public class SocketService extends Service {
 
     // 发送消息到服务器的方法
     public void sendMessage(String message) {
-        if (socket != null && outputStream != null) {
-            new Thread(() -> {
-                try {
-                    outputStream.write(message.getBytes(StandardCharsets.UTF_8));
-                    outputStream.flush();
-//                    showToast("消息已发送");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "消息发送失败: " + e.getMessage());
-                    showToast("消息发送失败");
+        new SendMessageTask().execute(message);
+    }
+
+    // AsyncTask 用于发送消息
+    private class SendMessageTask extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... messages) {
+            synchronized (SocketService.this) {
+                if (socket != null && outputStream != null) {
+                    try {
+                        String message = messages[0];
+                        outputStream.write(message.getBytes(StandardCharsets.UTF_8));
+                        outputStream.flush();
+                        return true; // 发送成功
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "消息发送失败: " + e.getMessage());
+                        showToast("消息发送失败");
+                        return false; // 发送失败
+                    }
+                } else {
+                    showToast("套接字未连接");
+                    return false; // 发送失败
                 }
-            }).start();
-        } else {
-            showToast("套接字未连接");
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            super.onPostExecute(success);
+            if (success) {
+                // 消息发送成功
+                // showToast("消息已发送"); // 可在需要时显示 Toast
+            }
         }
     }
+
 
     // 从服务器读取消息的方法
     private void readFromSocket() {

@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.singleantennartk.BluetoothFunActivity;
 import com.example.singleantennartk.BtThread.ConnectedThread;
+import com.example.singleantennartk.MainActivity;
 import com.example.singleantennartk.R;
 import com.example.singleantennartk.SocketService;
 
@@ -37,7 +38,6 @@ public class DataAcceptanceFragment extends Fragment {
 
     private static TextView ReceiveGGATextView=null;
     private static TextView ReceiveRMCTextView=null;
-    static int text_n=0;
 
     private Handler handler;
     private Runnable runnable;
@@ -45,6 +45,13 @@ public class DataAcceptanceFragment extends Fragment {
 
     TextView lonText=null;
     TextView latText=null;
+    TextView distanceText=null;
+
+    Button RecordTestPointButton;
+
+
+    double wgs84lon,wgs84lat;
+    double lastwgs84lon=0,lastwgs84lat=0;
 
 
     public DataAcceptanceFragment() {
@@ -81,6 +88,18 @@ public class DataAcceptanceFragment extends Fragment {
 
         lonText=view.findViewById(R.id.lonText);
         latText=view.findViewById(R.id.latText);
+        distanceText=view.findViewById(R.id.distanceText);
+
+        RecordTestPointButton = view.findViewById(R.id.RecordTestPointButton);
+
+        //记录测试点按钮
+        RecordTestPointButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lastwgs84lon = wgs84lon;
+                lastwgs84lat = wgs84lat;
+            }
+        });
 
         // 初始化 Handler
         handler = new Handler();
@@ -95,7 +114,6 @@ public class DataAcceptanceFragment extends Fragment {
                 // 例如更新 UI 或执行其他逻辑
 
                 // 示例：每隔一定时间更新一次文本
-                text_n++;
                 ReceiveGGATextView.setText(BluetoothFunActivity.ReadGGAString);
                 ReceiveRMCTextView.setText(BluetoothFunActivity.ReadRMCString);
 
@@ -124,8 +142,15 @@ public class DataAcceptanceFragment extends Fragment {
 //                String stationID = parts[14];    // 0451
 
 
-                lonText.setText(" " + dms_to_degrees(Double.parseDouble(longitude)));
-                latText.setText(" " + dms_to_degrees(Double.parseDouble(latitude)));
+
+                wgs84lon = dms_to_degrees(Double.parseDouble(longitude));
+                wgs84lat = dms_to_degrees(Double.parseDouble(latitude));
+                lonText.setText(" " + wgs84lon);
+                latText.setText(" " + wgs84lat);
+
+                distanceText.setText(" " + linearDistance(wgs84lat,wgs84lon,lastwgs84lat,lastwgs84lon)*1000 + "m");
+
+//                linearDistance(lastwgs84lat,lastwgs84lon,wgs84lat,wgs84lon);
 
                 // 再次调度定时任务
                 handler.postDelayed(this, TIMER_DELAY);
@@ -148,5 +173,18 @@ public class DataAcceptanceFragment extends Fragment {
         double minutes = dms - degrees * 100; // 取小数部分作为分数
         double decimal_degrees = degrees + minutes / 60.0; // 转换为十进制度数
         return decimal_degrees;
+    }
+    public static double linearDistance(double lat1, double lon1, double lat2, double lon2) {
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+
+        // 使用简单的勾股定理计算直线距离
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = 6371.0 * c; // 地球半径取6371.0公里
+
+        return distance;
     }
 }
